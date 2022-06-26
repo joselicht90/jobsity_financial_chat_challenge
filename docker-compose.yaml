@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./JobsityFinancialChat/Dockerfile
+    ports:
+      - 7000:7000 # port mapping
+      - 7001:7001
+    depends_on:
+      - db
+      - bot
+    environment:
+      - DB_CONNECTION_STRING=Server=db;Initial Catalog=jobsity;User=sa;Password=j0bsity2o22!;MultipleActiveResultSets=true
+      - BOT_API_URL=http://bot:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7000
+  bot:
+    image: bot
+    container_name: bot
+    build:
+      context: .
+      dockerfile: ./JobsityStockBot/Dockerfile
+    ports:
+      - 5000:5000 # port mapping
+      - 5001:5001
+    depends_on:
+      - db
+    environment:
+      - DB_CONNECTION_STRING=Server=db;Initial Catalog=jobsity;User=sa;Password=j0bsity2o22!;MultipleActiveResultSets=true
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+  db:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: db
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+    environment:
+      SA_PASSWORD: j0bsity2o22!
+      ACCEPT_EULA: 'Y'
+    restart: always
+    ports:
+      - 1401:1433
+
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:
