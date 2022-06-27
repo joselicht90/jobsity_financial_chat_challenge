@@ -40,6 +40,7 @@ Docker must be isntalled in the on your system.
 
 - Messages are ordered by their timestamps.
 - You can use the command `/stock=stock_code` to retrieve information about the stock.
+- Commands available are configured via DDBB.
 - All the messages from the users are stores in a Sql Server database (Excluded the bot messages).
 - Limit of 50 messages per chat.
 - .NET identity authentication.
